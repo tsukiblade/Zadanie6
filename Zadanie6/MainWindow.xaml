@@ -1,0 +1,181 @@
+﻿<Window
+    x:Class="Zadanie6.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:Zadanie6.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Zadanie6"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="window"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <converters:PersonToListItemInfoConverter x:Key="PersonToListItemInfoConverter" />
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Margin="10">
+            <ListBox
+                Name="PersonsListBox"
+                ItemsSource="{Binding Data}"
+                SelectionChanged="PersonsListBox_OnSelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="local:Person">
+                        <Label Content="{Binding Converter={StaticResource PersonToListItemInfoConverter}}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+
+        <Grid Grid.Column="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,10"
+                    Content="Imie" />
+                <TextBox
+                    Name="NameBox"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="0,0,0,10"
+                    Text="{Binding SelectedPerson.Name, Mode=OneWay}" />
+
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="0,0,0,10"
+                    Content="Nazwisko" />
+                <TextBox
+                    Name="SurnameBox"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,0,10"
+                    Text="{Binding SelectedPerson.Surname, Mode=OneWay}" />
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <GroupBox>
+                    <GroupBox.Header>
+                        <CheckBox Name="DetailsCheckBox" Content="Dane szczegółowe" />
+                    </GroupBox.Header>
+
+                    <Grid Name="Details" IsEnabled="{Binding IsChecked, Source={x:Reference DetailsCheckBox}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="0,10,0,10"
+                            Content="Adres e-mail" />
+                        <TextBox
+                            Name="EmailBox"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="0,10,0,10"
+                            Text="{Binding SelectedPerson.Email, Mode=OneWay}" />
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="0,0,0,10"
+                            Content="Kwota wpłaty" />
+                        <TextBox
+                            Name="DepositBox"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="0,0,0,10"
+                            Text="{Binding SelectedPerson.Deposit, Mode=OneWay}" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Margin="0,0,0,10"
+                            Content="Region" />
+                        <ComboBox
+                            Name="RegionBox"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="0,0,0,10"
+                            Text="{Binding SelectedPerson.Region, Mode=OneWay}" />
+
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="0,0,0,10"
+                            Content="Poziom dostępu" />
+                        <Slider
+                            Name="AccessLevelSlider"
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Margin="0,0,0,10"
+                            IsSnapToTickEnabled="True"
+                            Maximum="4"
+                            TickPlacement="BottomRight"
+                            Ticks="0, 1, 2, 3, 4"
+                            Value="{Binding SelectedPerson.AccessLevel, Mode=OneWay}" />
+                    </Grid>
+                </GroupBox>
+            </Grid>
+
+            <Grid Grid.Row="3" Margin="0,10,10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    Name="DeleteButton"
+                    Grid.Column="0"
+                    Margin="0,0,5,0"
+                    Content="Usuń" />
+                <Button
+                    Name="EditButton"
+                    Grid.Column="1"
+                    Margin="5,0,5,0"
+                    Click="EditButton_OnClick"
+                    Content="Edytuj" />
+                <Button
+                    Name="AddButton"
+                    Grid.Column="2"
+                    Margin="5,0,0,0"
+                    Click="AddButton_OnClick"
+                    Content="Dodaj" />
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
