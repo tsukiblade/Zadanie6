@@ -27,10 +27,16 @@ namespace Zadanie6
 
         private void AddButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var person = CreatePersonBasedOnForms();
+            var person = new Person
+            {
+                Name = "Please",
+                Surname = "Edit"
+            };
 
             Data.Add(person);
-            ClearForms();
+            SelectedPerson = person;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedPerson)));
+            PersonsListBox.SelectedIndex = this.PersonsListBox.Items.Count - 1; //focus last item
         }
 
         private static double? TryParseDouble(string? text)
@@ -75,7 +81,13 @@ namespace Zadanie6
 
         private void EditButton_OnClick(object sender, RoutedEventArgs e)
         {
-            //Data[PersonsListBox.SelectedIndex] = CreatePersonBasedOnForms();
+            var idx = PersonsListBox.SelectedIndex;
+            if (SelectedPerson is null || idx == -1)
+            {
+                return;
+            }
+
+            Data[idx] = CreatePersonBasedOnForms();
             Data.Refresh();
         }
 
@@ -93,11 +105,14 @@ namespace Zadanie6
             };
         }
 
-        private void ClearForms()
+        private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
         {
-            SelectedPerson = null;
-            DetailsCheckBox.IsChecked = false;
-            EmailBox.Text = NameBox.Text = SurnameBox.Text = DepositBox.Text = RegionBox.Text = null;
+            if (SelectedPerson is null)
+            {
+                return;
+            }
+
+            Data.RemoveAt(PersonsListBox.SelectedIndex);
         }
     }
 }

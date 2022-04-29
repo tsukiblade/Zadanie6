@@ -17,7 +17,6 @@ namespace Zadanie6
         private RegionEnum? _region;
         private double _accessLevel;
         
-
         public string Name
         {
             get => _name;
@@ -29,7 +28,6 @@ namespace Zadanie6
             get => _surname;
             set => SetProperty(ref _surname, value);
         }
-
 
         public string? Email
         {

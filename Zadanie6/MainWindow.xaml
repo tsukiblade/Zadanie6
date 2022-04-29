@@ -7,13 +7,15 @@
     xmlns:local="clr-namespace:Zadanie6"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="window"
-    Title="MainWindow"
+    Title="Zadanie 6"
     Width="800"
     Height="450"
     DataContext="{Binding RelativeSource={RelativeSource Self}}"
     mc:Ignorable="d">
     <Window.Resources>
         <converters:PersonToListItemInfoConverter x:Key="PersonToListItemInfoConverter" />
+        <converters:PersonContainsDetailedDataToBoolConverter x:Key="PersonContainsDetailedDataToBoolConverter" />
+        <converters:PersonIsNotNullConverter x:Key="PersonIsNotNullConverter" />
     </Window.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -62,6 +64,7 @@
                     Grid.Row="0"
                     Grid.Column="1"
                     Margin="0,0,0,10"
+                    IsEnabled="{Binding SelectedPerson, Converter={StaticResource PersonIsNotNullConverter}}"
                     Text="{Binding SelectedPerson.Name, Mode=OneWay}" />
 
                 <Label
@@ -74,13 +77,18 @@
                     Grid.Row="1"
                     Grid.Column="1"
                     Margin="0,0,0,10"
+                    IsEnabled="{Binding SelectedPerson, Converter={StaticResource PersonIsNotNullConverter}}"
                     Text="{Binding SelectedPerson.Surname, Mode=OneWay}" />
             </Grid>
 
             <Grid Grid.Row="2">
                 <GroupBox>
                     <GroupBox.Header>
-                        <CheckBox Name="DetailsCheckBox" Content="Dane szczegółowe" />
+                        <CheckBox
+                            Name="DetailsCheckBox"
+                            Content="Dane szczegółowe"
+                            IsChecked="{Binding SelectedPerson, Mode=OneWay, Converter={StaticResource PersonContainsDetailedDataToBoolConverter}, FallbackValue=False}"
+                            IsEnabled="{Binding SelectedPerson, Converter={StaticResource PersonIsNotNullConverter}}" />
                     </GroupBox.Header>
 
                     <Grid Name="Details" IsEnabled="{Binding IsChecked, Source={x:Reference DetailsCheckBox}}">
@@ -162,13 +170,16 @@
                     Name="DeleteButton"
                     Grid.Column="0"
                     Margin="0,0,5,0"
-                    Content="Usuń" />
+                    Click="DeleteButton_OnClick"
+                    Content="Usuń"
+                    IsEnabled="{Binding SelectedPerson, Converter={StaticResource PersonIsNotNullConverter}}" />
                 <Button
                     Name="EditButton"
                     Grid.Column="1"
                     Margin="5,0,5,0"
                     Click="EditButton_OnClick"
-                    Content="Edytuj" />
+                    Content="Edytuj"
+                    IsEnabled="{Binding SelectedPerson, Converter={StaticResource PersonIsNotNullConverter}}" />
                 <Button
                     Name="AddButton"
                     Grid.Column="2"
